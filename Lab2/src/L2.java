@@ -5,6 +5,7 @@ import static java.util.Collections.*;
 class Funkcja_Jednowymiarowa{
     int a, b, d, iloscOsobnikow;
     int t = 0;
+    Random r = new Random();
 
     public Funkcja_Jednowymiarowa(int a, int b, int d, int iloscOsobnikow)
     {
@@ -14,10 +15,26 @@ class Funkcja_Jednowymiarowa{
         this.iloscOsobnikow = iloscOsobnikow;
     }
 
+    ArrayList<Double> FX = new ArrayList<>();
+    ArrayList<Integer> T = new ArrayList<>();
+    ArrayList<Integer> Tos1 = new ArrayList<>();
+    ArrayList<Integer> Tos2 = new ArrayList<>();
+    ArrayList<Integer> Tos3 = new ArrayList<>();
+    ArrayList<Integer> Tos4 = new ArrayList<>();
+    ArrayList<Integer> Tos5 = new ArrayList<>();
+    ArrayList<Integer> Tos6 = new ArrayList<>();
+    ArrayList<Integer> Tos7 = new ArrayList<>();
+    ArrayList<Integer> Tos8 = new ArrayList<>();
+    ArrayList<Integer> Tos9 = new ArrayList<>();
+    ArrayList<Integer> Tos10 = new ArrayList<>();
+    ArrayList<ArrayList> TList = new ArrayList<>();
+    ArrayList<Double> result = new ArrayList<>();
+    ArrayList<ArrayList> resultTList = new ArrayList<>();
+
+
     void licz() {
         double iloscKombinacji = (b-a) * Math.pow(10, d) + 1;
         double m = 1;
-        Random r = new Random();
         double xPrim = 0, x = 0;
         double Fx = 0;
         while (0 == 0) {
@@ -27,21 +44,172 @@ class Funkcja_Jednowymiarowa{
             m += 1;
             continue;
         }
-        System.out.println(m);
+//        System.out.println(m);
         for(int i = 1; i <= iloscOsobnikow; i++){
             for(int j = 1; j <= m; j++){
                 t = r.nextInt(2);
-                System.out.print(t);
+                T.add(t);
+//                System.out.print(t);
                 xPrim += t * Math.pow(2, m-j);
             }
+
             x = a + (((b - a) * xPrim) / (Math.pow(2, m) - 1));
-            System.out.print(" x' = " + xPrim + " x = " + x);
+//            System.out.print(" x' = " + xPrim + " x = " + x);
 
             Fx = 10 + Math.pow(x, 2) - 10 * Math.cos(20 * 3.14 * x);
-            System.out.print(" F(x) = " + Fx);
-            System.out.println();
+            FX.add(Fx);
+//            System.out.print(" F(x) = " + Fx);
+//            System.out.println();
             xPrim = 0;
             x = 0;
+        }
+        for(int i = 0; i < T.size(); i++) {
+            if(i < 8) Tos1.add(T.get(i));
+            if(i >= 8 && i < 16) Tos2.add(T.get(i));
+            if(i >= 16 && i < 24) Tos3.add(T.get(i));
+            if(i >= 24 && i < 32) Tos4.add(T.get(i));
+            if(i >= 32 && i < 40) Tos5.add(T.get(i));
+            if(i >= 40 && i < 48) Tos6.add(T.get(i));
+            if(i >= 48 && i < 56) Tos7.add(T.get(i));
+            if(i >= 56 && i < 64) Tos8.add(T.get(i));
+            if(i >= 64 && i < 72) Tos9.add(T.get(i));
+            if(i >= 72 && i < 80) Tos10.add(T.get(i));
+        }
+
+        TList.add(Tos1);
+        TList.add(Tos2);
+        TList.add(Tos3);
+        TList.add(Tos4);
+        TList.add(Tos5);
+        TList.add(Tos6);
+        TList.add(Tos7);
+        TList.add(Tos8);
+        TList.add(Tos9);
+        TList.add(Tos10);
+
+        rankingowa();
+    }
+
+    public void rankingowa() {
+//        System.out.println("FX = " + FX);
+//        System.out.println("T = " + T);
+//        System.out.println("TList = " + TList);
+
+        mutacja();
+    }
+    public void mutacja() {
+//        double pm = 0.2;
+        krzyzowanie();
+    }
+
+    public void krzyzowanie() {
+        double pk = 0.5;
+        double rand;
+        int randDelete;
+        ArrayList<Double> RandTab = new ArrayList<>();
+        ArrayList<Integer> COUNTER = new ArrayList<>();
+
+        System.out.println("pk = " + pk);
+        for(int i = 0; i < TList.size(); i++) {
+            rand = r.nextDouble();
+            RandTab.add(rand);
+        }
+        System.out.println(RandTab);
+
+        int counter = 0;
+        for(int i = 0; i < T.size(); i++) {
+            if((i+1)%8 == 1) System.out.print(counter + ". ");
+            System.out.print(T.get(i));
+            if((i+1)%8 == 0) {
+                System.out.println(" "  + RandTab.get(counter));
+                if(RandTab.get(counter) < pk) {
+//                    System.out.println(" < " + pk);
+                    COUNTER.add(counter);
+                }
+                counter++;
+            }
+        }
+        System.out.println(COUNTER);
+
+
+
+        if(COUNTER.size()%2 != 0) {
+            randDelete = r.nextInt(COUNTER.size());
+            COUNTER.remove(randDelete);
+        }
+        System.out.println(COUNTER);
+        Collections.shuffle(COUNTER);
+
+        for(int i = 0; i < COUNTER.size(); i++) {
+            System.out.print(COUNTER.get(i) + " ");
+            if((i+1)%2==0) System.out.println();
+        }
+        int licznik = 0;
+        int liczydlo = 0;
+        int randPara;
+        ArrayList<Integer> nowyT = new ArrayList<>();
+        ArrayList<Integer> RANDPARA = new ArrayList<>();
+
+        while(licznik < COUNTER.size()*8) {
+            if((licznik+1)%8 == 0) {
+                for (int i = COUNTER.get(liczydlo) * 8; i < COUNTER.get(liczydlo) * 8 + 8; i++) {
+                    System.out.print(T.get(i));
+                    nowyT.add(T.get(i));
+                }
+
+                liczydlo++;
+                if((licznik+1)%16 == 0) {
+                    randPara = r.nextInt(8)+1;
+                    System.out.print(" " + randPara);
+                    RANDPARA.add(randPara);
+                }
+
+                System.out.println();
+            }
+            licznik++;
+        }
+
+        counter = 0;
+        licznik = 1;
+        liczydlo = 1;
+
+        int index = 2;
+        ArrayList<Integer> Potomek1 = new ArrayList<>();
+        ArrayList<Integer> Potomek2 = new ArrayList<>();
+        for(int i =0; i < 8; i++) Potomek2.add(null);
+        System.out.println();
+        System.out.println("Rodzice 1");
+        for(int i = 0; i < nowyT.size(); i++) {
+            System.out.print(nowyT.get(i));
+            if(licznik == RANDPARA.get(counter)) System.out.print("|");
+            if(liczydlo%2 != 0) {
+                if(licznik <= RANDPARA.get(counter)) Potomek1.add(nowyT.get(i));
+                if(licznik > RANDPARA.get(counter)) Potomek2.set(licznik-1, nowyT.get(i));
+            }
+            if(liczydlo%2 == 0) {
+                if(licznik > RANDPARA.get(counter)) Potomek1.add(nowyT.get(i));
+                if(licznik <= RANDPARA.get(counter)) Potomek2.set(licznik-1, nowyT.get(i));
+            }
+
+            licznik++;
+            if((i+1)%8 == 0){
+                System.out.println();
+                licznik = 1;
+                liczydlo++;
+            }
+            if((i+1)%16 == 0) {
+                counter++;
+                System.out.println("Potomkowie " + counter);
+                System.out.println(Potomek1);
+                System.out.println(Potomek2);
+                Potomek1.clear();
+//                Potomek2.clear();
+                if(counter<RANDPARA.size()) {
+                    index = counter+1;
+                    System.out.println();
+                    System.out.println("Rodzice " + index);
+                }
+            }
         }
     }
 }
@@ -156,6 +324,7 @@ class Funkcja_Wielowymiarowa{
         double x = 0;
         double Fx = 0;
         double pm = 0.2;
+        double pk = 0.5;
 
         ArrayList<Integer> A = new ArrayList<>();
         ArrayList<Integer> B = new ArrayList<>();
@@ -163,14 +332,15 @@ class Funkcja_Wielowymiarowa{
         ArrayList<Integer> M = new ArrayList<>();
         ArrayList<ArrayList> T = new ArrayList<>();
         ArrayList<Integer> Ti = new ArrayList<>();
+        ArrayList<Integer> Ti_copy = new ArrayList<>();
         ArrayList<Integer> XPrim = new ArrayList<>();
         ArrayList<Double> X = new ArrayList<>();
         ArrayList<Double> FX = new ArrayList<>();
         public static final HashMap<Integer, Double> H_MAPA = new HashMap<>();
         void licz() {
             while (i < n) {
-                ai = r.nextInt(2)+1;
-                bi = r.nextInt(2)+1;
+                ai = r.nextInt(2) + 1;
+                bi = r.nextInt(2) + 1;
                 di = 1;
 
                 while (1 == 1) {
@@ -180,7 +350,7 @@ class Funkcja_Wielowymiarowa{
                         break;
                     } else {
                         ai = r.nextInt(2);
-                        bi = r.nextInt(2) ;
+                        bi = r.nextInt(2);
                         continue;
                     }
                 }
@@ -188,9 +358,9 @@ class Funkcja_Wielowymiarowa{
                 i++;
             }
 
-//            System.out.println("A: " + A);
-//            System.out.println("B: " + B);
-//            System.out.println("D: " + D);
+            System.out.println("A: " + A);
+            System.out.println("B: " + B);
+            System.out.println("D: " + D);
 
             i = 0;
 
@@ -207,8 +377,8 @@ class Funkcja_Wielowymiarowa{
                 }
                 i++;
             }
-//            System.out.println("M: " + M);
-            System.out.println("pm: " + pm);
+            System.out.println("M: " + M);
+            System.out.println("pk: " + pk);
             System.out.println();
             i = 0;
             int m = 0;
@@ -227,37 +397,43 @@ class Funkcja_Wielowymiarowa{
                 double piRand = r.nextDouble();
                 piRand *= 100;
                 piRand = Math.round(piRand);
-                piRand/=100;
+                piRand /= 100;
 
 
                 PiRand.add(piRand);
                 while (i < M.size()) {
+
                     for (int k = 1; k <= M.get(i); k++) {
                         t = r.nextInt(2);
                         Ti.add(t);
+                        Ti_copy.add(t);
                         System.out.print(t);
                         xPrim += t * Math.pow(2, M.get(i) - k);
                     }
-
-
                     XPrim.add(xPrim);
                     x = A.get(i) + (((B.get(i) - A.get(i)) * xPrim) / (Math.pow(2, M.get(i)) - 1));
-
-
                     xPrim = 0;
                     X.add(x);
                     x = 0;
-
                     i++;
 //                    System.out.print(" ");
-                    T.add(Ti);
+
 //                    System.out.println("T " + T);
                 }
-                H_MAPA.put(Ti.get(j), PiRand.get(j-1));
+                T.add(Ti_copy);
+//                System.out.println(Ti_copy);
+//                System.out.println("T " + T);
+//                System.out.print(Ti.get(0));
+
+
+                i = 1;
+
+//                Ti_copy.clear();
+                H_MAPA.put(Ti.get(j), PiRand.get(j - 1));
                 i = 0;
-                System.out.println();
+
             }
-            System.out.println(H_MAPA);
+//            System.out.println(H_MAPA);
             ArrayList<Double> TiRand = new ArrayList<>();
             double ti_rand;
 //            System.out.println("x' = " + XPrim);
@@ -265,35 +441,102 @@ class Funkcja_Wielowymiarowa{
 //            System.out.println("x = " + X);
 //            System.out.println("Ti = " + Ti);
 
-            for (int i = 0; i < Ti.size(); i++) {
-                System.out.print(Ti.get(i));
-                if((i+1)%m == 0){ System.out.println(" " + PiRand.get(0));
-            }
+//                for (int k = 0; k < Ti.size(); k++) {
+//                    ti_rand = r.nextDouble();
+//                    ti_rand *= 100;
+//                    ti_rand = Math.round(ti_rand);
+//                    ti_rand /= 100;
+//                    TiRand.add(ti_rand);
+//                    if (ti_rand < pm) {
+//                        if (Ti.get(i) == 1) Ti.set(i, 0);
+//                        else Ti.set(i, 1);
+//
+//                    }
+////                System.out.println(Ti.get(s) + " ");
+//                }
             System.out.println();
             int counter = 0;
-            for (int i = 0; i < 5; i++) {
-                for(int j = 0; j < 8; j++) {
-                    if(PiRand.get() < pm) {
-                        System.out.print(Ti.get(counter));
-                    }
+            ArrayList<Double> PiRandKrzyz = new ArrayList<>();
+            ArrayList<Integer> TiRandKrzyz = new ArrayList<>();
+            for (int i = 0; i < Ti.size(); i++) {
+                System.out.print(Ti.get(i));
+                if ((i + 1) % m == 0) {
+                    System.out.println(" " + PiRand.get(counter));
                     counter++;
                 }
-                System.out.println();
             }
-            for(int i = 0; i < Ti.size(); i++) {
-                ti_rand = r.nextDouble();
-                ti_rand*=100;
-                ti_rand=Math.round(ti_rand);
-                ti_rand/=100;
-                TiRand.add(ti_rand);
-                if(ti_rand < pm) {
-                    if(Ti.get(i) == 1) Ti.set(i, 0);
-                    else Ti.set(i, 1);
-
+            System.out.println();
+            counter = 0;
+            for (int i = 0; i < Ti.size(); i++) {
+                if(PiRand.get(counter)<pk) {
+                    System.out.print(Ti.get(i));
+                    TiRandKrzyz.add(Ti.get(i));
                 }
-//                System.out.println(Ti.get(s) + " ");
-
+                if ((i + 1) % m == 0) {
+                    if(PiRand.get(counter)<pk) {
+                        System.out.print(" " + PiRand.get(counter));
+                        PiRandKrzyz.add(PiRand.get(counter));
+                    }
+                    counter++;
+                    System.out.println();
+                }
             }
+
+            System.out.println(PiRandKrzyz);
+
+            if(PiRandKrzyz.size()%2 != 0) {
+                int randDelete = r.nextInt(PiRandKrzyz.size());
+                int newRandDelete = randDelete*8;
+                PiRandKrzyz.remove(randDelete);
+                if(randDelete == 0) {
+                    for(int j=0; j <8; j++) TiRandKrzyz.remove(0);
+                }
+                else {
+                    for(int j=newRandDelete; j<newRandDelete+8; j++) TiRandKrzyz.remove(newRandDelete);
+                }
+            }
+            System.out.println(PiRandKrzyz);
+//            System.out.println("TI po krzyżowaniu: " + TiRandKrzyz);
+            counter = 0;
+            for (int i = 0; i < TiRandKrzyz.size(); i++) {
+                System.out.print(TiRandKrzyz.get(i));
+                if((i+1)%8 == 0) {
+                    System.out.println(" " + PiRandKrzyz.get(counter));
+                    counter++;
+                }
+            }
+            System.out.println();
+
+            i = 0;
+            int randOs1 = 0;
+            int randOs2 = 0;
+            int randIndex = 0;
+            int rozmiar = PiRandKrzyz.size();
+            ArrayList<Integer> RAND_INDEX = new ArrayList<>();
+            ArrayList<Double> OS1 = new ArrayList<>();
+            ArrayList<Double> OS2 = new ArrayList<>();
+            ArrayList<Integer> list = new ArrayList<Integer>();
+
+            Collections.shuffle(PiRandKrzyz);
+            System.out.println(PiRandKrzyz);
+//            for (int i = 0; i < PiRandKrzyz.size(); i++) {
+//                System.out.print(PiRandKrzyz.get(i) + " " + Pi);
+//            }
+
+//                System.out.println();
+//
+//                for (int k = 0; k < 5; k++) {
+//                    for (int j = 0; j < 8; j++) {
+//                        if (PiRand.get(k) < pm) {
+//                            System.out.print(Ti.get(counter));
+//                        }
+//                        counter++;
+//                    }
+//                    System.out.println();
+//                }
+
+
+                // MUTACJA
 //            for (int i = 0; i < Ti.size(); i++) {
 //                System.out.print(TiRand.get(i) + " ");
 //                if((i+1)%m == 0) System.out.println();
@@ -307,20 +550,20 @@ class Funkcja_Wielowymiarowa{
 //            }
 //            System.out.println();
 
-            Fx = 10 * n;
-            i = 0;
-            while (i < iloscOsobnikow) {
-                Fx += Math.pow(X.get(i), 2) - 10 * Math.cos(20 * 3.14 * X.get(i));
-                i++;
-                FX.add(Fx);
-            }
+                Fx = 10 * n;
+                i = 0;
+                while (i < iloscOsobnikow) {
+                    Fx += Math.pow(X.get(i), 2) - 10 * Math.cos(20 * 3.14 * X.get(i));
+                    i++;
+                    FX.add(Fx);
+                }
 //            System.out.println("F(x) = " + FX);
 //            metodaTurniejowaMax();
 //            metodaTurniejowaMin();
 //            metodaRankingowaMax();
 //            metodaRankingowaMin();
 //            metodaRuletki();
-        }
+            }
 
         public void metodaTurniejowaMax() {
             System.out.println();
@@ -534,15 +777,15 @@ class Funkcja_Wielowymiarowa{
 
 public class L2 {
     public static void main(String[] args) {
-        int a = -1, b = 1, d = 1;
+        int a = -1, b = 1, d = 2;
         int iloscOsobnikow = 10;
 
-//        Funkcja_Jednowymiarowa f1 = new Funkcja_Jednowymiarowa(a,b,d,iloscOsobnikow);
-//        f1.licz();
+        Funkcja_Jednowymiarowa f1 = new Funkcja_Jednowymiarowa(a,b,d,iloscOsobnikow);
+        f1.licz();
 //        Funkcja_Trojwymiarowa f2 = new Funkcja_Trojwymiarowa(-1,1,1,2,2,3,1,2,3,5);
 //        f2.licz();
-        Funkcja_Wielowymiarowa f3 = new Funkcja_Wielowymiarowa(2,5);
-        f3.licz();
+//        Funkcja_Wielowymiarowa f3 = new Funkcja_Wielowymiarowa(2,10);
+//        f3.licz();
 
     }
 }
